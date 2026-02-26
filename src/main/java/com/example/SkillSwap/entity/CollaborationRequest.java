@@ -1,6 +1,7 @@
 package com.example.SkillSwap.entity;
 
 import com.example.SkillSwap.type.RequestStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,8 +9,6 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter
-@Setter
 @Table(name = "collaboration_requests")
 public class CollaborationRequest {
 
@@ -17,12 +16,10 @@ public class CollaborationRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //  Who sent the request
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id", nullable = false)
     private User sender;
 
-    //  Who receives the request
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receiver_id", nullable = false)
     private User receiver;
