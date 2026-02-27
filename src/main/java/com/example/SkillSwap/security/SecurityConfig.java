@@ -38,9 +38,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/api/forgot/**").permitAll()
                         .requestMatchers("/api/user/login" , "/api/user/signup" , "/api/testing").permitAll()
-                        .requestMatchers("/oauth2/**", "/login/**").permitAll()
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 // ✅ ENABLE OAUTH2 LOGIN
