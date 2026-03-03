@@ -4,11 +4,11 @@ package com.example.SkillSwap.entity;
 import com.example.SkillSwap.type.AuthProviderType;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import com.example.SkillSwap.type.Mode;
 
 import java.util.Collection;
 import java.util.List;
@@ -43,11 +43,13 @@ public class User  implements UserDetails {
     @Column
     private String location;
 
+
     @Column
     private String availability;    // Example: Weekdays 7-9 PM
 
-    @Column
-    private String preferredMode;   // Online / Offline / Hybrid
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Mode preferredMode = Mode.ONLINE;   // Online / Offline / Hybrid
 
 
     @Column(nullable = false)

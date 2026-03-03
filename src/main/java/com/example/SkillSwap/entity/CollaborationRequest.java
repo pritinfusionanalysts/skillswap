@@ -1,7 +1,6 @@
 package com.example.SkillSwap.entity;
 
 import com.example.SkillSwap.type.RequestStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
