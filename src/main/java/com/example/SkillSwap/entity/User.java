@@ -40,6 +40,15 @@ public class User  implements UserDetails {
     @Column
     private String bio;
 
+    @Column
+    private String location;
+
+    @Column
+    private String availability;    // Example: Weekdays 7-9 PM
+
+    @Column
+    private String preferredMode;   // Online / Offline / Hybrid
+
 
     @Column(nullable = false)
     private String role;   // ADMIN, USER

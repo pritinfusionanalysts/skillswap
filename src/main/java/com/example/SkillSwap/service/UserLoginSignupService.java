@@ -24,6 +24,9 @@ public class UserLoginSignupService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+
+    // for loggin
+
     public LoginResponceDto userValidate(LoginRequestDto loginRequestDto) {
 
         authenticationManager.authenticate(
@@ -42,6 +45,8 @@ public class UserLoginSignupService {
 
     }
 
+
+    // for signup
 
     public User userSave(SignupRequestDto userDTO ) {
 

@@ -9,6 +9,8 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
+@Setter
+@Getter
 @Table(name = "collaboration_requests")
 public class CollaborationRequest {
 
