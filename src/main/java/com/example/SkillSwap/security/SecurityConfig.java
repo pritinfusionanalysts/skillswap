@@ -42,7 +42,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/user/login" , "/api/user/signup" , "/api/testing").permitAll()
                         .anyRequest().authenticated()
                 )
-                // ✅ ENABLE OAUTH2 LOGIN
+                // ENABLE OAUTH2 LOGIN
                 .oauth2Login(oauth -> oauth
                         .successHandler(oAuth2SuccessHandler)
                 )

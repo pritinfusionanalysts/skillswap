@@ -3,6 +3,7 @@ package com.example.SkillSwap.entity;
 
 import com.example.SkillSwap.type.AuthProviderType;
 import jakarta.persistence.*;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,9 +15,8 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
 @Table(name = "users")
+@Data
 public class User  implements UserDetails {
 
     @Id
@@ -33,6 +33,8 @@ public class User  implements UserDetails {
     @Column(name="password", nullable = true)
     private String password;
 
+    @Column
+    private String gender;
 
     @Column
     private String image;
@@ -84,5 +86,6 @@ public class User  implements UserDetails {
 
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
     private List<CollaborationRequest> receivedRequests;
+
 
 }
