@@ -16,4 +16,6 @@ public interface CollaborationRequestRepository extends JpaRepository<Collaborat
     List<CollaborationRequest> findByReceiver(User receiver);
 
     List<CollaborationRequest> findBySender(User sender);
+
+    Optional<CollaborationRequest> findExistingRequest(User user1, User user2);
 }

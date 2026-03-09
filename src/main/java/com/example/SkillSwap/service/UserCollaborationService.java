@@ -19,16 +19,18 @@ public class UserCollaborationService {
 
     private final CollaborationRequestRepository requestRepository;
     private final UserRepository userRepository;
+    private final ChatRoomService chatRoomService;
 
 
     public String sendRequest(Long receiverId) {
 
         // Get logged-in user
-        String email = SecurityContextHolder.getContext()
+        String userName = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
 
-        User sender = userRepository.findByEmail(email)
+
+        User sender = userRepository.findByUsername(userName)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         User receiver = userRepository.findById(receiverId)
@@ -39,11 +41,15 @@ public class UserCollaborationService {
             throw new RuntimeException("You cannot send request to yourself");
         }
 
-        // Check if already pending
-        requestRepository.findBySenderAndReceiverAndStatus(
-                sender, receiver, RequestStatus.PENDING
-        ).ifPresent(r -> {
-            throw new RuntimeException("Request already sent");
+        // --- CRITICAL FIX START ---
+        // Check if ANY request (Pending OR Accepted) exists in either direction
+        requestRepository.findExistingRequest(sender, receiver).ifPresent(r -> {
+            if (r.getStatus() == RequestStatus.PENDING) {
+                throw new RuntimeException("A pending request already exists between you two.");
+            }
+            if (r.getStatus() == RequestStatus.ACCEPTED) {
+                throw new RuntimeException("You are already collaborators.");
+            }
         });
 
         CollaborationRequest request = new CollaborationRequest();
@@ -62,11 +68,11 @@ public class UserCollaborationService {
     public String acceptRequest(Long requestId) {
 
 
-        String email = SecurityContextHolder.getContext()
+        String userName = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
 
-        User currentUser = userRepository.findByEmail(email)
+        User currentUser = userRepository.findByUsername(userName)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
 
@@ -86,17 +92,25 @@ public class UserCollaborationService {
         request.setStatus(RequestStatus.ACCEPTED);
         requestRepository.save(request);
 
-        return "Request Accepted";
+
+        Long senderId = request.getSender().getId();
+        Long receiverId = request.getReceiver().getId();
+
+
+        String roomId = chatRoomService.createChatRoom(senderId, receiverId);
+
+
+        return roomId;
     }
 
     public String rejectRequest(Long requestId) {
 
 
-        String email = SecurityContextHolder.getContext()
+        String userName = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getName();
 
-        User currentUser = userRepository.findByEmail(email)
+        User currentUser = userRepository.findByUsername(userName)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
 
