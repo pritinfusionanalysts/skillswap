@@ -2,6 +2,7 @@ package com.example.SkillSwap.entity;
 
 
 import com.example.SkillSwap.type.AuthProviderType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
@@ -79,12 +80,15 @@ public class User  implements UserDetails {
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<UserSkill> userSkills;
 
     @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<CollaborationRequest> sentRequests;
 
     @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<CollaborationRequest> receivedRequests;
 
 

@@ -1,18 +1,17 @@
 package com.example.SkillSwap.dto;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.web.multipart.MultipartFile;
 
 @Data
-@NoArgsConstructor
-public class UserProfileUpdateDTO {
+@Builder // Makes it easy to create the DTO in the service
+public class UserResponseDTO {
     private String username;
+    private String email;
     private String bio;
     private String location;
     private String availability;
     private String preferredMode;
     private String gender;
-    private MultipartFile image;
-
+    private String image;
 }

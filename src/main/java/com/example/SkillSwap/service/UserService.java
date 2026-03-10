@@ -1,6 +1,7 @@
 package com.example.SkillSwap.service;
 
 import com.example.SkillSwap.dto.UserProfileUpdateDTO;
+import com.example.SkillSwap.dto.UserResponseDTO;
 import com.example.SkillSwap.entity.User;
 import com.example.SkillSwap.repository.UserRepository;
 import com.example.SkillSwap.type.Mode;
@@ -15,8 +16,8 @@ import java.io.IOException;
 public class UserService
 {
 
-    private  UserRepository userRepository;
-    private ImageService imageService;
+    private  final UserRepository userRepository;
+    private final ImageService imageService;
 
     public User updateUserDetail(String username, UserProfileUpdateDTO updateDto) throws IOException {
 
@@ -28,7 +29,7 @@ public class UserService
         }
 
         if(updateDto.getAvailability() != null){
-            user.setBio(updateDto.getAvailability());
+            user.setAvailability(updateDto.getAvailability());
         }
 
         if(updateDto.getLocation() != null){
@@ -50,4 +51,26 @@ public class UserService
 
         return  userRepository.save(user);
     }
+
+
+    public UserResponseDTO getUserProfileData(String username) {
+        // 1. Find the user from the database
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // 2. Map the Entity data to the DTO
+        return UserResponseDTO.builder()
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .bio(user.getBio())
+                .location(user.getLocation())
+                .availability(user.getAvailability())
+                .preferredMode(user.getPreferredMode() != null
+                        ? user.getPreferredMode().toString()
+                        : "ONLINE")
+                .gender(user.getGender())
+                .image(user.getImage())
+                .build();
+    }
+
 }

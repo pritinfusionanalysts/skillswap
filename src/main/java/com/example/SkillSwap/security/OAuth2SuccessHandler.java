@@ -47,7 +47,7 @@ public class OAuth2SuccessHandler implements AuthenticationSuccessHandler {
         String username = loginResponse.getUsername();
         // Redirect to React
         response.sendRedirect(
-                "http://localhost:3000/oauth2/success?token=" + encodedToken +
+                "http://localhost:3000/auth?token=" + encodedToken +
                         "&username=" + URLEncoder.encode(username, StandardCharsets.UTF_8)
         );
     }

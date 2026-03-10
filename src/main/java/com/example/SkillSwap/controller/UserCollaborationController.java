@@ -1,11 +1,15 @@
 package com.example.SkillSwap.controller;
 
 
+import com.example.SkillSwap.dto.CollaborationRequestDTO;
+import com.example.SkillSwap.entity.CollaborationRequest;
 import com.example.SkillSwap.service.UserCollaborationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -40,6 +44,12 @@ public class UserCollaborationController {
         );
     }
 
+
+
+    @GetMapping("/pending")
+    public ResponseEntity<List<CollaborationRequestDTO>> getPending() {
+        return ResponseEntity.ok(userCollaborationService.getMyPendingRequests());
+    }
 
 
 }

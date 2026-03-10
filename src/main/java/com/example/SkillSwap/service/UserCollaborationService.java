@@ -1,6 +1,7 @@
 package com.example.SkillSwap.service;
 
 
+import com.example.SkillSwap.dto.CollaborationRequestDTO;
 import com.example.SkillSwap.entity.CollaborationRequest;
 import com.example.SkillSwap.repository.CollaborationRequestRepository;
 import com.example.SkillSwap.repository.UserRepository;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.example.SkillSwap.entity.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -131,5 +134,36 @@ public class UserCollaborationService {
         requestRepository.save(request);
 
         return "Request Rejected";
+    }
+
+
+    public List<CollaborationRequestDTO> getMyPendingRequests() {
+        // Get the logged-in user from SecurityContext
+        String userName = SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getName();
+
+        User currentUser = userRepository.findByUsername(userName)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        System.out.println("curent_____________user:-"+currentUser.getId());
+
+        // Return the list of pending requests for this user
+        List<CollaborationRequest> requests =  requestRepository.findByReceiverIdAndStatus(
+                currentUser.getId(),
+                RequestStatus.PENDING
+        );
+
+        return requests.stream().map(request -> {
+            CollaborationRequestDTO dto = new CollaborationRequestDTO();
+            dto.setId(request.getId());
+            dto.setSenderId(request.getSender().getId());
+            dto.setSenderName(request.getSender().getUsername());
+            dto.setSenderEmail(request.getSender().getEmail());
+            dto.setSenderImage(request.getSender().getImage());
+            dto.setStatus(request.getStatus());
+            dto.setCreatedAt(request.getCreatedAt());
+            return dto;
+        }).collect(Collectors.toList());
     }
 }
